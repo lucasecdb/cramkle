@@ -1,8 +1,10 @@
 import { useQuery } from '@apollo/react-hooks'
 import { Trans, plural, select } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { extent, max } from 'd3-array'
+import classNames from 'classnames'
+import { bisector, extent, max } from 'd3-array'
 import { scaleLinear, scaleTime } from 'd3-scale'
+import { pointer } from 'd3-selection'
 import { line } from 'd3-shape'
 import { differenceInDays, endOfToday, startOfDay, subDays } from 'date-fns'
 import gql from 'graphql-tag'
@@ -203,6 +205,13 @@ const StatisticsPage: React.FC = () => {
     [data?.deckStatistics?.studyFrequency]
   )
 
+  const [isHidden, setHidden] = useState(true)
+
+  const [tooltipData, setTooltipData] =
+    useState<TransformedStudyFrequency | null>(null)
+
+  const chartRef = useRef<SVGSVGElement>(null)
+
   if (error) {
     return (
       <Container className="py-4">
@@ -283,9 +292,27 @@ const StatisticsPage: React.FC = () => {
 
   const ticksX = interval === '7' ? 7 : width / 80
   const ticksY = 5
+  const bisect = bisector<TransformedStudyFrequency, Date>((d) => d.date)
 
   if (!data?.deckStatistics) {
     return null
+  }
+
+  const handleMouseMove: React.MouseEventHandler<SVGGElement> = (evt) => {
+    const [x] = pointer(evt, chartRef.current)
+
+    const date = frequencyX.invert(x)
+
+    const index = bisect.left(studyFrequency, date, 1)
+
+    const a = studyFrequency[index - 1]
+    const b = studyFrequency[index]
+
+    setTooltipData(
+      b && date.getTime() - a.date.getTime() > b.date.getTime() - date.getTime()
+        ? b
+        : a
+    )
   }
 
   return (
@@ -389,9 +416,17 @@ const StatisticsPage: React.FC = () => {
         <div className="w-100" ref={chartContainerRef}>
           {data.deckStatistics.studyFrequency.length > 0 ? (
             <svg
-              className="w-full py-2 px-4"
+              ref={chartRef}
+              className="relative w-full py-2 px-4"
               viewBox={`0 0 ${width} ${height}`}
               height={height}
+              onMouseOver={() => {
+                setHidden(false)
+              }}
+              onMouseOut={() => {
+                setHidden(true)
+              }}
+              onMouseMove={handleMouseMove}
             >
               <Axis
                 fontSize="10px"
@@ -472,6 +507,56 @@ const StatisticsPage: React.FC = () => {
                   className="text-txt text-opacity-text-primary"
                   d={reviewLine}
                 />
+              </g>
+              <g
+                className={classNames({
+                  hidden: isHidden,
+                })}
+                transform={`translate(${frequencyX(
+                  tooltipData?.date ?? 0
+                )}, ${frequencyY(
+                  Math.max(
+                    tooltipData?.review ?? 0,
+                    tooltipData?.learning ?? 0,
+                    tooltipData?.new ?? 0
+                  )
+                )})`}
+              >
+                <circle r={5} fill="currentColor" className="text-primary" />
+                <rect
+                  className="overlay"
+                  fill="var(--surface)"
+                  x={6}
+                  y={-50}
+                  rx={10}
+                  ry={10}
+                  width={140}
+                  height={70}
+                />
+                <text
+                  className="text-txt-inverted"
+                  fill="currentColor"
+                  x={18}
+                  y={-30}
+                >
+                  New: {tooltipData?.new}
+                </text>
+                <text
+                  x={18}
+                  y={-10}
+                  className="text-txt-inverted"
+                  fill="currentColor"
+                >
+                  Learning: {tooltipData?.learning}
+                </text>
+                <text
+                  x={18}
+                  y={10}
+                  className="text-txt-inverted"
+                  fill="currentColor"
+                >
+                  Review: {tooltipData?.review}
+                </text>
               </g>
             </svg>
           ) : (

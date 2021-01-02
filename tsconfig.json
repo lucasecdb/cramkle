@@ -19,7 +19,7 @@
     "jsx": "react-jsx",
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "build"],
   "include": [
     "./**/*.ts",
     "./**/*.tsx",
