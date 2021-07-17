@@ -18,6 +18,7 @@ import { useTopBarLoading } from '../../hooks/useTopBarLoading'
 import Axis from '../Axis'
 import BackButton from '../BackButton'
 import ChartGrid from '../ChartGrid'
+import { useTheme } from '../Theme'
 import { Card, CardContent } from '../views/Card'
 import { Container } from '../views/Container'
 import { Listbox, ListboxOption } from '../views/Listbox'
@@ -117,6 +118,7 @@ const StatisticsCard: React.FC<{ label: ReactNode; value: ReactNode }> = ({
 const StatisticsPage: React.FC = () => {
   const [interval, setIntervalValue] = useSearchParamsState('interval', '7')
   const [selectedDeck, setSelectedDeck] = useSearchParamsState('deck')
+  const { theme } = useTheme()
 
   const { current: today } = useRef(endOfToday())
   const startDate = startOfDay(subDays(today, parseInt(interval, 10) - 1))
@@ -415,150 +417,143 @@ const StatisticsPage: React.FC = () => {
 
         <div className="w-100" ref={chartContainerRef}>
           {data.deckStatistics.studyFrequency.length > 0 ? (
-            <svg
-              ref={chartRef}
-              className="relative w-full py-2 px-4"
-              viewBox={`0 0 ${width} ${height}`}
-              height={height}
-              onMouseOver={() => {
-                setHidden(false)
-              }}
-              onMouseOut={() => {
-                setHidden(true)
-              }}
-              onMouseMove={handleMouseMove}
-            >
-              <Axis
-                fontSize="10px"
-                orientation="left"
-                offset={margin.left}
-                scaler={frequencyY}
-                tickSizeOuter={1}
-                ticks={ticksY}
-                textAnchor="end"
-                domainLineProps={{
-                  stroke: 'currentColor',
-                  strokeOpacity: 0.1,
-                  fill: 'none',
+            <>
+              <svg
+                ref={chartRef}
+                className="relative w-full py-2 px-4"
+                viewBox={`0 0 ${width} ${height}`}
+                height={height}
+                onMouseOver={() => {
+                  setHidden(false)
                 }}
-                prefix={
-                  <>
-                    <text
-                      x={-margin.left}
-                      y={width > 480 ? 12 : 6}
-                      fill="currentColor"
-                      textAnchor="start"
-                    >
-                      <Trans>Flashcards studied</Trans>
-                    </text>
-                  </>
-                }
-              />
-              <Axis
-                fontSize="10px"
-                orientation="bottom"
-                offset={height - margin.bottom}
-                scaler={frequencyX}
-                ticks={ticksX}
-                tickKeyFn={(tick) => tick.getTime()}
-                tickLabel={(tick) =>
-                  i18n.date(tick, {
-                    day: daysInterval <= 30 ? 'numeric' : undefined,
-                    month:
-                      daysInterval <= 30
-                        ? 'short'
-                        : daysInterval <= 365
-                        ? 'long'
-                        : undefined,
-                    year: daysInterval > 365 ? 'numeric' : undefined,
-                  })
-                }
-                tickSizeOuter={0}
-                domainLineProps={{
-                  stroke: 'currentColor',
-                  strokeOpacity: 0.1,
-                  fill: 'none',
+                onMouseOut={() => {
+                  setHidden(true)
                 }}
-              />
-              <ChartGrid
-                orientation="horizontal"
-                scaler={frequencyX}
-                ticks={ticksX}
-                inlineStart={margin.top}
-                inlineEnd={height - margin.bottom}
-              />
-              <ChartGrid
-                orientation="vertical"
-                scaler={frequencyY}
-                ticks={ticksY}
-                inlineStart={margin.left}
-                inlineEnd={width - margin.right}
-              />
-              <g
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                onMouseMove={handleMouseMove}
               >
-                <path className="text-violet-1" d={learningLine} />
-                <path className="text-green-1" d={newLine} />
-                <path
-                  className="text-txt text-opacity-text-primary"
-                  d={reviewLine}
+                <Axis
+                  fontSize="10px"
+                  orientation="left"
+                  offset={margin.left}
+                  scaler={frequencyY}
+                  tickSizeOuter={1}
+                  ticks={ticksY}
+                  textAnchor="end"
+                  domainLineProps={{
+                    stroke: 'currentColor',
+                    strokeOpacity: 0.1,
+                    fill: 'none',
+                  }}
+                  prefix={
+                    <>
+                      <text
+                        x={-margin.left}
+                        y={width > 480 ? 12 : 6}
+                        fill="currentColor"
+                        textAnchor="start"
+                      >
+                        <Trans>Flashcards studied</Trans>
+                      </text>
+                    </>
+                  }
                 />
-              </g>
-              <g
-                className={classNames({
-                  hidden: isHidden,
-                })}
-                transform={`translate(${frequencyX(
-                  tooltipData?.date ?? 0
-                )}, ${frequencyY(
-                  Math.max(
-                    tooltipData?.review ?? 0,
-                    tooltipData?.learning ?? 0,
-                    tooltipData?.new ?? 0
-                  )
-                )})`}
+                <Axis
+                  fontSize="10px"
+                  orientation="bottom"
+                  offset={height - margin.bottom}
+                  scaler={frequencyX}
+                  ticks={ticksX}
+                  tickKeyFn={(tick) => tick.getTime()}
+                  tickLabel={(tick) =>
+                    i18n.date(tick, {
+                      day: daysInterval <= 30 ? 'numeric' : undefined,
+                      month:
+                        daysInterval <= 30
+                          ? 'short'
+                          : daysInterval <= 365
+                          ? 'long'
+                          : undefined,
+                      year: daysInterval > 365 ? 'numeric' : undefined,
+                    })
+                  }
+                  tickSizeOuter={0}
+                  domainLineProps={{
+                    stroke: 'currentColor',
+                    strokeOpacity: 0.1,
+                    fill: 'none',
+                  }}
+                />
+                <ChartGrid
+                  orientation="horizontal"
+                  scaler={frequencyX}
+                  ticks={ticksX}
+                  inlineStart={margin.top}
+                  inlineEnd={height - margin.bottom}
+                />
+                <ChartGrid
+                  orientation="vertical"
+                  scaler={frequencyY}
+                  ticks={ticksY}
+                  inlineStart={margin.left}
+                  inlineEnd={width - margin.right}
+                />
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path className="text-violet-1" d={learningLine} />
+                  <path className="text-green-1" d={newLine} />
+                  <path
+                    className="text-txt text-opacity-text-primary"
+                    d={reviewLine}
+                  />
+                </g>
+                <g
+                  className={classNames({
+                    hidden: isHidden,
+                  })}
+                  transform={`translate(${frequencyX(
+                    tooltipData?.date ?? 0
+                  )}, ${frequencyY(
+                    Math.max(
+                      tooltipData?.review ?? 0,
+                      tooltipData?.learning ?? 0,
+                      tooltipData?.new ?? 0
+                    )
+                  )})`}
+                >
+                  <circle r={5} fill="currentColor" className="text-primary" />
+                </g>
+              </svg>
+              <div
+                style={{
+                  transform: `translate(${frequencyX(
+                    tooltipData?.date ?? 0
+                  )}, ${frequencyY(
+                    Math.max(
+                      tooltipData?.review ?? 0,
+                      tooltipData?.learning ?? 0,
+                      tooltipData?.new ?? 0
+                    )
+                  )})`,
+                }}
+                className={classNames(
+                  'bg-surface overlay text-txt text-opacity-text-primary',
+                  {
+                    '__light-mode': theme === 'dark',
+                    '__dark-mode': theme === 'light',
+                    'hidden': isHidden,
+                  }
+                )}
               >
-                <circle r={5} fill="currentColor" className="text-primary" />
-                <rect
-                  className="overlay"
-                  fill="var(--surface)"
-                  x={6}
-                  y={-50}
-                  rx={10}
-                  ry={10}
-                  width={140}
-                  height={70}
-                />
-                <text
-                  className="text-txt-inverted"
-                  fill="currentColor"
-                  x={18}
-                  y={-30}
-                >
-                  New: {tooltipData?.new}
-                </text>
-                <text
-                  x={18}
-                  y={-10}
-                  className="text-txt-inverted"
-                  fill="currentColor"
-                >
-                  Learning: {tooltipData?.learning}
-                </text>
-                <text
-                  x={18}
-                  y={10}
-                  className="text-txt-inverted"
-                  fill="currentColor"
-                >
-                  Review: {tooltipData?.review}
-                </text>
-              </g>
-            </svg>
+                <Trans>New</Trans>: {tooltipData?.new}
+                <Trans>Learning</Trans>: {tooltipData?.learning}
+                <Trans>Review</Trans>: {tooltipData?.review}
+              </div>
+            </>
           ) : (
             <div className="py-6 px-2 text-center flex flex-col items-center justify-center">
               <Body1>

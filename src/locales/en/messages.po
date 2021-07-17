@@ -17,15 +17,15 @@ msgstr ""
 msgid "({0} notes)"
 msgstr "({0} notes)"
 
-#: src/components/pages/StatisticsPage.tsx:283
+#: src/components/pages/StatisticsPage.tsx:299
 msgid "1 month"
 msgstr "1 month"
 
-#: src/components/pages/StatisticsPage.tsx:286
+#: src/components/pages/StatisticsPage.tsx:302
 msgid "1 year"
 msgstr "1 year"
 
-#: src/components/pages/StatisticsPage.tsx:280
+#: src/components/pages/StatisticsPage.tsx:296
 msgid "7 days"
 msgstr "7 days"
 
@@ -109,7 +109,7 @@ msgstr "An error has occurred when saving your note"
 msgid "An error has occurred when trying to get your decks to study."
 msgstr "An error has occurred when trying to get your decks to study."
 
-#: src/components/pages/StatisticsPage.tsx:160
+#: src/components/pages/StatisticsPage.tsx:165
 msgid "An error has occurred, try refreshing the page or wait a few minutes before trying again"
 msgstr "An error has occurred, try refreshing the page or wait a few minutes before trying again"
 
@@ -334,9 +334,9 @@ msgstr "Current password is required to change your password"
 msgid "Dark mode"
 msgstr "Dark mode"
 
-#: src/components/pages/StatisticsPage.tsx:156
-#: src/components/pages/StatisticsPage.tsx:172
-#: src/components/pages/StatisticsPage.tsx:222
+#: src/components/pages/StatisticsPage.tsx:161
+#: src/components/pages/StatisticsPage.tsx:177
+#: src/components/pages/StatisticsPage.tsx:238
 msgid "Deck Statistics"
 msgstr "Deck Statistics"
 
@@ -511,7 +511,7 @@ msgstr "First page"
 msgid "Flashcards"
 msgstr "Flashcards"
 
-#: src/components/pages/StatisticsPage.tsx:300
+#: src/components/pages/StatisticsPage.tsx:321
 msgid "Flashcards studied"
 msgstr "Flashcards studied"
 
@@ -613,7 +613,7 @@ msgstr "Home"
 msgid "I agree to the <0>Terms & Conditions</0>"
 msgstr "I agree to the <0>Terms & Conditions</0>"
 
-#: src/components/pages/StatisticsPage.tsx:277
+#: src/components/pages/StatisticsPage.tsx:293
 msgid "Interval"
 msgstr "Interval"
 
@@ -651,6 +651,7 @@ msgid "Learn about spaced repetition"
 msgstr "Learn about spaced repetition"
 
 #: src/components/FlashCardStatus.tsx:20
+#: src/components/pages/StatisticsPage.tsx:386
 msgid "Learning"
 msgstr "Learning"
 
@@ -722,6 +723,7 @@ msgid "Name is required"
 msgstr "Name is required"
 
 #: src/components/FlashCardStatus.tsx:19
+#: src/components/pages/StatisticsPage.tsx:385
 msgid "New"
 msgstr "New"
 
@@ -775,11 +777,11 @@ msgstr "Note's model"
 msgid "Notes"
 msgstr "Notes"
 
-#: src/components/pages/StatisticsPage.tsx:267
+#: src/components/pages/StatisticsPage.tsx:283
 msgid "Number of flashcards studied"
 msgstr "Number of flashcards studied"
 
-#: src/components/pages/StatisticsPage.tsx:266
+#: src/components/pages/StatisticsPage.tsx:282
 msgid "Number of times studied"
 msgstr "Number of times studied"
 
@@ -791,7 +793,7 @@ msgstr "OL"
 msgid "Optimize your knowledge retention with this effective study method."
 msgstr "Optimize your knowledge retention with this effective study method."
 
-#: src/components/pages/StatisticsPage.tsx:240
+#: src/components/pages/StatisticsPage.tsx:256
 msgid "Overview"
 msgstr "Overview"
 
@@ -912,6 +914,7 @@ msgid "Retry"
 msgstr "Retry"
 
 #: src/components/FlashCardStatus.tsx:21
+#: src/components/pages/StatisticsPage.tsx:387
 msgid "Review"
 msgstr "Review"
 
@@ -935,7 +938,7 @@ msgstr "Search notes..."
 msgid "Select a model"
 msgstr "Select a model"
 
-#: src/components/pages/StatisticsPage.tsx:228
+#: src/components/pages/StatisticsPage.tsx:244
 msgid "Select your deck"
 msgstr "Select your deck"
 
@@ -992,7 +995,7 @@ msgstr "Study"
 msgid "Study deck"
 msgstr "Study deck"
 
-#: src/components/pages/StatisticsPage.tsx:273
+#: src/components/pages/StatisticsPage.tsx:289
 msgid "Study frequency"
 msgstr "Study frequency"
 
@@ -1072,7 +1075,7 @@ msgstr "Title"
 msgid "To create a note you need to associate it with a model."
 msgstr "To create a note you need to associate it with a model."
 
-#: src/components/pages/StatisticsPage.tsx:244
+#: src/components/pages/StatisticsPage.tsx:260
 msgid "Total study time"
 msgstr "Total study time"
 
@@ -1081,11 +1084,11 @@ msgstr "Total study time"
 msgid "Try again"
 msgstr "Try again"
 
-#: src/components/pages/StatisticsPage.tsx:179
+#: src/components/pages/StatisticsPage.tsx:184
 msgid "Try creating a deck first and study it in order to see your study statistics here."
 msgstr "Try creating a deck first and study it in order to see your study statistics here."
 
-#: src/components/pages/StatisticsPage.tsx:330
+#: src/components/pages/StatisticsPage.tsx:396
 msgid "Try selecting a broader interval above."
 msgstr "Try selecting a broader interval above."
 
@@ -1168,11 +1171,11 @@ msgstr "Warning"
 msgid "We couldn't find the page you requested"
 msgstr "We couldn't find the page you requested"
 
-#: src/components/pages/StatisticsPage.tsx:176
+#: src/components/pages/StatisticsPage.tsx:181
 msgid "We don't have anything to show to you right now."
 msgstr "We don't have anything to show to you right now."
 
-#: src/components/pages/StatisticsPage.tsx:325
+#: src/components/pages/StatisticsPage.tsx:391
 msgid "We don't have enough data to display in the supplied period."
 msgstr "We don't have enough data to display in the supplied period."
 
@@ -1289,7 +1292,7 @@ msgstr "{0, plural, zero {# decks} one {# deck} other {# decks}}"
 msgid "{0, plural, zero {# models} one {# model} other {# models}}"
 msgstr "{0, plural, zero {# models} one {# model} other {# models}}"
 
-#: src/components/pages/StatisticsPage.tsx:244
+#: src/components/pages/StatisticsPage.tsx:260
 msgid "{0, select, millisecond {{1, plural, one {{formattedStudyTime} millisecond} other {{formattedStudyTime} milliseconds}}} second {{2, plural, one {{formattedStudyTime} second} other {{formattedStudyTime} seconds}}} minute {{3, plural, one {{formattedStudyTime} minute} other {{formattedStudyTime} minutes}}} hour {{4, plural, one {{formattedStudyTime} hour} other {{formattedStudyTime} hours}}} day {{5, plural, one {{formattedStudyTime} day} other {{formattedStudyTime} days}}}}"
 msgstr "{0, select, millisecond {{1, plural, one {{formattedStudyTime} millisecond} other {{formattedStudyTime} milliseconds}}} second {{2, plural, one {{formattedStudyTime} second} other {{formattedStudyTime} seconds}}} minute {{3, plural, one {{formattedStudyTime} minute} other {{formattedStudyTime} minutes}}} hour {{4, plural, one {{formattedStudyTime} hour} other {{formattedStudyTime} hours}}} day {{5, plural, one {{formattedStudyTime} day} other {{formattedStudyTime} days}}}}"
 

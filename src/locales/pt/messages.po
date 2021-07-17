@@ -17,15 +17,15 @@ msgstr ""
 msgid "({0} notes)"
 msgstr "({0} notas)"
 
-#: src/components/pages/StatisticsPage.tsx:283
+#: src/components/pages/StatisticsPage.tsx:299
 msgid "1 month"
 msgstr "1 mês"
 
-#: src/components/pages/StatisticsPage.tsx:286
+#: src/components/pages/StatisticsPage.tsx:302
 msgid "1 year"
 msgstr "1 ano"
 
-#: src/components/pages/StatisticsPage.tsx:280
+#: src/components/pages/StatisticsPage.tsx:296
 msgid "7 days"
 msgstr "7 dias"
 
@@ -109,7 +109,7 @@ msgstr "Ocorreu um erro ao salvar sua nota"
 msgid "An error has occurred when trying to get your decks to study."
 msgstr "Ocorreu um erro enquanto tentávamos buscar seus decks para estudar."
 
-#: src/components/pages/StatisticsPage.tsx:160
+#: src/components/pages/StatisticsPage.tsx:165
 msgid "An error has occurred, try refreshing the page or wait a few minutes before trying again"
 msgstr "Ocorreu um erro, tente recarregar a página ou espere alguns minutos antes de tentar novamente"
 
@@ -334,9 +334,9 @@ msgstr "Senha atual é obrigatória para mudar sua senha"
 msgid "Dark mode"
 msgstr "Modo escuro"
 
-#: src/components/pages/StatisticsPage.tsx:156
-#: src/components/pages/StatisticsPage.tsx:172
-#: src/components/pages/StatisticsPage.tsx:222
+#: src/components/pages/StatisticsPage.tsx:161
+#: src/components/pages/StatisticsPage.tsx:177
+#: src/components/pages/StatisticsPage.tsx:238
 msgid "Deck Statistics"
 msgstr "Estatísticas do deck"
 
@@ -511,7 +511,7 @@ msgstr "Primeira página"
 msgid "Flashcards"
 msgstr "Flashcards"
 
-#: src/components/pages/StatisticsPage.tsx:300
+#: src/components/pages/StatisticsPage.tsx:321
 msgid "Flashcards studied"
 msgstr "Flashcards estudados"
 
@@ -613,7 +613,7 @@ msgstr "Página Inicial"
 msgid "I agree to the <0>Terms & Conditions</0>"
 msgstr "Eu concordo com os <0>Termos e Condições</0>"
 
-#: src/components/pages/StatisticsPage.tsx:277
+#: src/components/pages/StatisticsPage.tsx:293
 msgid "Interval"
 msgstr "Intervalo"
 
@@ -651,6 +651,7 @@ msgid "Learn about spaced repetition"
 msgstr "Aprenda sobre repetição espaçada"
 
 #: src/components/FlashCardStatus.tsx:20
+#: src/components/pages/StatisticsPage.tsx:386
 msgid "Learning"
 msgstr "Aprendendo"
 
@@ -722,6 +723,7 @@ msgid "Name is required"
 msgstr "Nome é obrigatório"
 
 #: src/components/FlashCardStatus.tsx:19
+#: src/components/pages/StatisticsPage.tsx:385
 msgid "New"
 msgstr "Novo"
 
@@ -775,11 +777,11 @@ msgstr "Modelo da nota"
 msgid "Notes"
 msgstr "Notas"
 
-#: src/components/pages/StatisticsPage.tsx:267
+#: src/components/pages/StatisticsPage.tsx:283
 msgid "Number of flashcards studied"
 msgstr "Número de flashcards estudados"
 
-#: src/components/pages/StatisticsPage.tsx:266
+#: src/components/pages/StatisticsPage.tsx:282
 msgid "Number of times studied"
 msgstr "Número de vezes estudado"
 
@@ -791,7 +793,7 @@ msgstr "Lista numerada"
 msgid "Optimize your knowledge retention with this effective study method."
 msgstr "Otimize a sua retenção de conhecimento com esse método efetivo de estudo."
 
-#: src/components/pages/StatisticsPage.tsx:240
+#: src/components/pages/StatisticsPage.tsx:256
 msgid "Overview"
 msgstr "Visão geral"
 
@@ -912,6 +914,7 @@ msgid "Retry"
 msgstr "Tentar novamente"
 
 #: src/components/FlashCardStatus.tsx:21
+#: src/components/pages/StatisticsPage.tsx:387
 msgid "Review"
 msgstr "Revisão"
 
@@ -935,7 +938,7 @@ msgstr "Buscar notas..."
 msgid "Select a model"
 msgstr "Selecione um modelo"
 
-#: src/components/pages/StatisticsPage.tsx:228
+#: src/components/pages/StatisticsPage.tsx:244
 msgid "Select your deck"
 msgstr "Selecione seu deck"
 
@@ -992,7 +995,7 @@ msgstr "Estudar"
 msgid "Study deck"
 msgstr "Estudar deck"
 
-#: src/components/pages/StatisticsPage.tsx:273
+#: src/components/pages/StatisticsPage.tsx:289
 msgid "Study frequency"
 msgstr "Frequência do estudo"
 
@@ -1072,7 +1075,7 @@ msgstr "Título"
 msgid "To create a note you need to associate it with a model."
 msgstr "Para criar uma nota você precisa associá-la a um modelo."
 
-#: src/components/pages/StatisticsPage.tsx:244
+#: src/components/pages/StatisticsPage.tsx:260
 msgid "Total study time"
 msgstr "Tempo total de estudo"
 
@@ -1081,11 +1084,11 @@ msgstr "Tempo total de estudo"
 msgid "Try again"
 msgstr "Tentar novamente"
 
-#: src/components/pages/StatisticsPage.tsx:179
+#: src/components/pages/StatisticsPage.tsx:184
 msgid "Try creating a deck first and study it in order to see your study statistics here."
 msgstr "Tente primeiro criar um deck e estude-o para que possa ver suas estatísticas de estudo aqui."
 
-#: src/components/pages/StatisticsPage.tsx:330
+#: src/components/pages/StatisticsPage.tsx:396
 msgid "Try selecting a broader interval above."
 msgstr "Tente selecionar um intervalo mais amplo acima."
 
@@ -1168,11 +1171,11 @@ msgstr "Atenção"
 msgid "We couldn't find the page you requested"
 msgstr "Não conseguimos encontrar a página requisitada"
 
-#: src/components/pages/StatisticsPage.tsx:176
+#: src/components/pages/StatisticsPage.tsx:181
 msgid "We don't have anything to show to you right now."
 msgstr "Nós ainda não temos nada para lhe mostrar agora."
 
-#: src/components/pages/StatisticsPage.tsx:325
+#: src/components/pages/StatisticsPage.tsx:391
 msgid "We don't have enough data to display in the supplied period."
 msgstr "Não temos dados suficientes para mostrar no período fornecido."
 
@@ -1289,7 +1292,7 @@ msgstr "{0, plural, zero {# decks} one {# deck} other {# decks}}"
 msgid "{0, plural, zero {# models} one {# model} other {# models}}"
 msgstr "{0, plural, zero {# modelos} one {# modelo} other {# modelos}}"
 
-#: src/components/pages/StatisticsPage.tsx:244
+#: src/components/pages/StatisticsPage.tsx:260
 msgid "{0, select, millisecond {{1, plural, one {{formattedStudyTime} millisecond} other {{formattedStudyTime} milliseconds}}} second {{2, plural, one {{formattedStudyTime} second} other {{formattedStudyTime} seconds}}} minute {{3, plural, one {{formattedStudyTime} minute} other {{formattedStudyTime} minutes}}} hour {{4, plural, one {{formattedStudyTime} hour} other {{formattedStudyTime} hours}}} day {{5, plural, one {{formattedStudyTime} day} other {{formattedStudyTime} days}}}}"
 msgstr "{0, select, millisecond {{1, plural, one {{formattedStudyTime} millisegundo} other {{formattedStudyTime} millisegundos}}} second {{2, plural, one {{formattedStudyTime} segundo} other {{formattedStudyTime} segundos}}} minute {{3, plural, one {{formattedStudyTime} minuto} other {{formattedStudyTime} minutos}}} hour {{4, plural, one {{formattedStudyTime} hora} other {{formattedStudyTime} horas}}} day {{5, plural, one {{formattedStudyTime} dia} other {{formattedStudyTime} dias}}}}"
 
