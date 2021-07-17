@@ -1,24 +1,16 @@
 import { useQuery } from '@apollo/react-hooks'
 import { Trans, plural, select } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import classNames from 'classnames'
-import { bisector, extent, max } from 'd3-array'
-import { scaleLinear, scaleTime } from 'd3-scale'
-import { pointer } from 'd3-selection'
-import { line } from 'd3-shape'
-import { differenceInDays, endOfToday, startOfDay, subDays } from 'date-fns'
+import { endOfToday, startOfDay, subDays } from 'date-fns'
 import gql from 'graphql-tag'
 import type { ReactNode } from 'react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import * as React from 'react'
-import ResizeObserver from 'resize-observer-polyfill'
 
 import { useSearchParamsState } from '../../hooks/useSearchParamsState'
 import { useTopBarLoading } from '../../hooks/useTopBarLoading'
-import Axis from '../Axis'
 import BackButton from '../BackButton'
-import ChartGrid from '../ChartGrid'
-import { useTheme } from '../Theme'
+import { StudyFrequencyGraph } from '../StudyFrequencyGraph'
 import { Card, CardContent } from '../views/Card'
 import { Container } from '../views/Container'
 import { Listbox, ListboxOption } from '../views/Listbox'
@@ -32,15 +24,7 @@ import {
 import type {
   DeckStatistics,
   DeckStatisticsVariables,
-  DeckStatistics_deckStatistics_studyFrequency,
 } from './__generated__/DeckStatistics'
-
-type TransformedStudyFrequency = Omit<
-  DeckStatistics_deckStatistics_studyFrequency,
-  'date'
-> & {
-  date: Date
-}
 
 const STATISTICS_QUERY = gql`
   query DeckStatistics(
@@ -75,30 +59,6 @@ const STATISTICS_QUERY = gql`
   }
 `
 
-const getChartDimensions = (width: number) => {
-  if (width > 480) {
-    return {
-      height: 500,
-      margin: {
-        left: 32,
-        right: 32,
-        top: 32,
-        bottom: 32,
-      },
-    }
-  }
-
-  return {
-    height: 300,
-    margin: {
-      left: 32,
-      right: 16,
-      top: 16,
-      bottom: 32,
-    },
-  }
-}
-
 const StatisticsCard: React.FC<{ label: ReactNode; value: ReactNode }> = ({
   label,
   value,
@@ -118,7 +78,6 @@ const StatisticsCard: React.FC<{ label: ReactNode; value: ReactNode }> = ({
 const StatisticsPage: React.FC = () => {
   const [interval, setIntervalValue] = useSearchParamsState('interval', '7')
   const [selectedDeck, setSelectedDeck] = useSearchParamsState('deck')
-  const { theme } = useTheme()
 
   const { current: today } = useRef(endOfToday())
   const startDate = startOfDay(subDays(today, parseInt(interval, 10) - 1))
@@ -171,31 +130,6 @@ const StatisticsPage: React.FC = () => {
     }
   }, [data?.deckStatistics?.totalStudyTime])
 
-  const chartContainerRef = useRef<HTMLDivElement>(null)
-  const [width, setWidth] = useState(0)
-
-  const { height, margin } = getChartDimensions(width)
-
-  const chartContainerNode = chartContainerRef.current
-
-  useEffect(() => {
-    if (!chartContainerNode) {
-      return
-    }
-
-    const chartContainerRect = chartContainerNode.getBoundingClientRect()
-
-    setWidth(chartContainerRect.width)
-
-    const observer = new ResizeObserver(([entry]) => {
-      setWidth(entry.contentRect.width)
-    })
-
-    observer.observe(chartContainerNode)
-
-    return () => observer.unobserve(chartContainerNode)
-  }, [chartContainerNode])
-
   const studyFrequency = useMemo(
     () =>
       (data?.deckStatistics?.studyFrequency ?? []).map((frequency) => {
@@ -206,13 +140,6 @@ const StatisticsPage: React.FC = () => {
       }),
     [data?.deckStatistics?.studyFrequency]
   )
-
-  const [isHidden, setHidden] = useState(true)
-
-  const [tooltipData, setTooltipData] =
-    useState<TransformedStudyFrequency | null>(null)
-
-  const chartRef = useRef<SVGSVGElement>(null)
 
   if (error) {
     return (
@@ -255,66 +182,13 @@ const StatisticsPage: React.FC = () => {
     )
   }
 
-  const frequencyX = scaleTime<number, number>()
-    .domain(extent(studyFrequency, (data) => data.date) as [Date, Date])
-    .range([margin.left, width - margin.right])
-
-  const frequencyY = scaleLinear()
-    .domain([
-      0,
-      Math.max(
-        max(studyFrequency, (d) => d.learning) as number,
-        max(studyFrequency, (d) => d.new) as number,
-        max(studyFrequency, (d) => d.review) as number
-      ),
-    ])
-    .nice()
-    .range([height - margin.bottom, margin.top])
-
-  const reviewLineShape = line<TransformedStudyFrequency>()
-    .x((d) => frequencyX(d.date)!)
-    .y((d) => frequencyY(d.review)!)
-  const learningLineShape = line<TransformedStudyFrequency>()
-    .x((d) => frequencyX(d.date)!)
-    .y((d) => frequencyY(d.learning)!)
-  const newLineShape = line<TransformedStudyFrequency>()
-    .x((d) => frequencyX(d.date)!)
-    .y((d) => frequencyY(d.new)!)
-
-  const reviewLine = reviewLineShape(studyFrequency) ?? ''
-  const learningLine = learningLineShape(studyFrequency) ?? ''
-  const newLine = newLineShape(studyFrequency) ?? ''
-
-  const daysInterval = differenceInDays(today, startDate)
-
   const formattedStudyTime = i18n.number(studyTime.time, {
     style: 'decimal',
     maximumFractionDigits: 2,
   })
 
-  const ticksX = interval === '7' ? 7 : width / 80
-  const ticksY = 5
-  const bisect = bisector<TransformedStudyFrequency, Date>((d) => d.date)
-
   if (!data?.deckStatistics) {
     return null
-  }
-
-  const handleMouseMove: React.MouseEventHandler<SVGGElement> = (evt) => {
-    const [x] = pointer(evt, chartRef.current)
-
-    const date = frequencyX.invert(x)
-
-    const index = bisect.left(studyFrequency, date, 1)
-
-    const a = studyFrequency[index - 1]
-    const b = studyFrequency[index]
-
-    setTooltipData(
-      b && date.getTime() - a.date.getTime() > b.date.getTime() - date.getTime()
-        ? b
-        : a
-    )
   }
 
   return (
@@ -389,185 +263,14 @@ const StatisticsPage: React.FC = () => {
         />
       </div>
 
-      <Card className="mt-12">
-        <div className="border-b border-divider border-opacity-divider flex flex-wrap justify-between items-center p-2">
-          <Headline2 className="m-2">
-            <Trans>Study frequency</Trans>
-          </Headline2>
-
-          <label className="m-2 flex items-center">
-            <Trans>Interval</Trans>
-            <Listbox
-              className="ml-3"
-              value={interval}
-              onChange={(value) => setIntervalValue(value)}
-            >
-              <ListboxOption value="7">
-                <Trans>7 days</Trans>
-              </ListboxOption>
-              <ListboxOption value="30">
-                <Trans>1 month</Trans>
-              </ListboxOption>
-              <ListboxOption value="365">
-                <Trans>1 year</Trans>
-              </ListboxOption>
-            </Listbox>
-          </label>
-        </div>
-
-        <div className="w-100" ref={chartContainerRef}>
-          {data.deckStatistics.studyFrequency.length > 0 ? (
-            <>
-              <svg
-                ref={chartRef}
-                className="relative w-full py-2 px-4"
-                viewBox={`0 0 ${width} ${height}`}
-                height={height}
-                onMouseOver={() => {
-                  setHidden(false)
-                }}
-                onMouseOut={() => {
-                  setHidden(true)
-                }}
-                onMouseMove={handleMouseMove}
-              >
-                <Axis
-                  fontSize="10px"
-                  orientation="left"
-                  offset={margin.left}
-                  scaler={frequencyY}
-                  tickSizeOuter={1}
-                  ticks={ticksY}
-                  textAnchor="end"
-                  domainLineProps={{
-                    stroke: 'currentColor',
-                    strokeOpacity: 0.1,
-                    fill: 'none',
-                  }}
-                  prefix={
-                    <>
-                      <text
-                        x={-margin.left}
-                        y={width > 480 ? 12 : 6}
-                        fill="currentColor"
-                        textAnchor="start"
-                      >
-                        <Trans>Flashcards studied</Trans>
-                      </text>
-                    </>
-                  }
-                />
-                <Axis
-                  fontSize="10px"
-                  orientation="bottom"
-                  offset={height - margin.bottom}
-                  scaler={frequencyX}
-                  ticks={ticksX}
-                  tickKeyFn={(tick) => tick.getTime()}
-                  tickLabel={(tick) =>
-                    i18n.date(tick, {
-                      day: daysInterval <= 30 ? 'numeric' : undefined,
-                      month:
-                        daysInterval <= 30
-                          ? 'short'
-                          : daysInterval <= 365
-                          ? 'long'
-                          : undefined,
-                      year: daysInterval > 365 ? 'numeric' : undefined,
-                    })
-                  }
-                  tickSizeOuter={0}
-                  domainLineProps={{
-                    stroke: 'currentColor',
-                    strokeOpacity: 0.1,
-                    fill: 'none',
-                  }}
-                />
-                <ChartGrid
-                  orientation="horizontal"
-                  scaler={frequencyX}
-                  ticks={ticksX}
-                  inlineStart={margin.top}
-                  inlineEnd={height - margin.bottom}
-                />
-                <ChartGrid
-                  orientation="vertical"
-                  scaler={frequencyY}
-                  ticks={ticksY}
-                  inlineStart={margin.left}
-                  inlineEnd={width - margin.right}
-                />
-                <g
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path className="text-violet-1" d={learningLine} />
-                  <path className="text-green-1" d={newLine} />
-                  <path
-                    className="text-txt text-opacity-text-primary"
-                    d={reviewLine}
-                  />
-                </g>
-                <g
-                  className={classNames({
-                    hidden: isHidden,
-                  })}
-                  transform={`translate(${frequencyX(
-                    tooltipData?.date ?? 0
-                  )}, ${frequencyY(
-                    Math.max(
-                      tooltipData?.review ?? 0,
-                      tooltipData?.learning ?? 0,
-                      tooltipData?.new ?? 0
-                    )
-                  )})`}
-                >
-                  <circle r={5} fill="currentColor" className="text-primary" />
-                </g>
-              </svg>
-              <div
-                style={{
-                  transform: `translate(${frequencyX(
-                    tooltipData?.date ?? 0
-                  )}, ${frequencyY(
-                    Math.max(
-                      tooltipData?.review ?? 0,
-                      tooltipData?.learning ?? 0,
-                      tooltipData?.new ?? 0
-                    )
-                  )})`,
-                }}
-                className={classNames(
-                  'bg-surface overlay text-txt text-opacity-text-primary',
-                  {
-                    '__light-mode': theme === 'dark',
-                    '__dark-mode': theme === 'light',
-                    'hidden': isHidden,
-                  }
-                )}
-              >
-                <Trans>New</Trans>: {tooltipData?.new}
-                <Trans>Learning</Trans>: {tooltipData?.learning}
-                <Trans>Review</Trans>: {tooltipData?.review}
-              </div>
-            </>
-          ) : (
-            <div className="py-6 px-2 text-center flex flex-col items-center justify-center">
-              <Body1>
-                <Trans>
-                  We don't have enough data to display in the supplied period.
-                </Trans>
-              </Body1>
-              <Body2 className="mt-2">
-                <Trans>Try selecting a broader interval above.</Trans>
-              </Body2>
-            </div>
-          )}
-        </div>
-      </Card>
+      <StudyFrequencyGraph
+        className="mt-12"
+        studyFrequency={studyFrequency}
+        interval={interval}
+        onIntervalChange={setIntervalValue}
+        today={today}
+        startDate={startDate}
+      />
     </Container>
   )
 }
