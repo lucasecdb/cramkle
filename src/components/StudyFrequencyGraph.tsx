@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Popover, positionDefault } from '@reach/popover'
+import { Popover, getCollisions } from '@reach/popover'
 import type { Position } from '@reach/tooltip'
 import classNames from 'classnames'
 import { bisector, extent, max } from 'd3-array'
@@ -137,11 +137,28 @@ export function StudyFrequencyGraph({
     .range([height - margin.bottom, margin.top])
 
   const getTooltipPosition: Position = useCallback(
-    (target, popover) => {
-      const style = positionDefault(target, popover)
+    (targetRect, popoverRect) => {
+      if (!targetRect || !popoverRect) {
+        return {}
+      }
 
-      const left = parseInt((style.left as string).split('px')[0], 10)
-      const top = parseInt((style.top as string).split('px')[0], 10)
+      const { directionRight, directionUp } = getCollisions(
+        targetRect,
+        popoverRect
+      )
+
+      const left = directionRight
+        ? targetRect.right - popoverRect.width + window.pageXOffset
+        : targetRect.left + window.pageXOffset
+
+      const top = directionUp
+        ? targetRect.top - popoverRect.height + window.pageYOffset
+        : targetRect.top + targetRect.height + window.pageYOffset
+
+      const style = {
+        left: 0,
+        top: 0,
+      }
 
       style.left = left + frequencyX(tooltipData?.date ?? 0)
 
